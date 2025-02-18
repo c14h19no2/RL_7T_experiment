@@ -23,7 +23,7 @@ try:
 	import appnope
 	appnope.nope()
 except: 
-	print 'APPNOPE NOT ACTIVE!'
+	print('APPNOPE NOT ACTIVE!')
 	
 class RLSession(EyelinkSession):
     def __init__(self, subject_number, index_number, scanner, tracker_on, experiment_name):
@@ -37,7 +37,7 @@ class RLSession(EyelinkSession):
         # screen = self.create_screen( size = screen_res, full_screen =0, physical_screen_distance = 159.0, background_color = background_color, physical_screen_size = (70, 40) )
         event.Mouse(visible=False, win=screen)
 
-        self.create_output_file_name(data_directory = 'data/'+self.experiment_name)
+        self.create_output_file_name(data_directory = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", self.experiment_name))
         if tracker_on:
             # self.create_tracker(auto_trigger_calibration = 1, calibration_type = 'HV9')
             # if self.tracker_on:
@@ -184,13 +184,13 @@ class RLSession(EyelinkSession):
             global AMS
             self.AMS = windll.amsserial # requires AmsSerial.dll !!!
         except:
-            print '### AmsSerial.dll not found. Download from www.vu-ams.nl'
+            print('### AmsSerial.dll not found. Download from www.vu-ams.nl')
 
         #AMSconnect 
         try:
             self.AMS.Connect("COM3", "AMS5fs")
         except:
-            print '### Failed to connect!'
+            print('### Failed to connect!')
 
 
     def positions_for_subject_number(self):
@@ -246,7 +246,7 @@ class RLSession(EyelinkSession):
 
         # calculate complete duration
         self.total_duration = np.array([np.array(tr.phase_durations).sum() for tr in self.trials]).sum()
-        print str(len(self.trials)) + '  trials generated. \nTotal net trial duration amounts to ' + str( self.total_duration ) + ' s.'  
+        print(str(len(self.trials)) + '  trials generated. \nTotal net trial duration amounts to ' + str( self.total_duration ) + ' s.')
 
     def create_training_trials(self):
         """create_training_trials is to be subclassed"""
@@ -280,7 +280,7 @@ class RLSession(EyelinkSession):
         try:
             self.AMS.Disconnect()
         except:
-            print '### Failed to disconnect!'            
+            print('### Failed to disconnect!')
 
     def run(self):
         """docstring for fname"""
@@ -292,7 +292,7 @@ class RLSession(EyelinkSession):
             try:
                 self.AMS.SendCodedMarker(i)
             except:
-                print '### Failed to send codedmarker!'
+                print('### Failed to send codedmarker!')
 
 
             # run the prepared trial
@@ -317,7 +317,7 @@ class RLSession(EyelinkSession):
                 ac = ac + self.reward_counter + self.loss_counter #total reward earned 
                 rc, lc = self.reward_counter, self.loss_counter #rewards and losses this run 
                 cc = self.correct_counter/len(self.trials) #percentage correct choices over all trials this run 
-                print ('percentage correct:', cc, 'of', len(self.trials), 'trials')
+                print('percentage correct:', cc, 'of', len(self.trials), 'trials')
                 f.write('%3.2f\t%3.2f\t%3.2f\t%3.2f\n'%(rc, lc, ac, cc))
 
 

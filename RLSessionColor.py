@@ -24,7 +24,7 @@ try:
     import appnope
     appnope.nope()
 except: 
-    print 'APPNOPE NOT ACTIVE!'
+    print('APPNOPE NOT ACTIVE!')
     
 class RLSessionColor(RLSession):
     def __init__(self, subject_number, index_number, scanner, tracker_on):

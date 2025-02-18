@@ -9,13 +9,13 @@ try:
     import appnope
     appnope.nope()
 except:
-    print 'APPNOPE NOT ACTIVE!'
+    print('APPNOPE NOT ACTIVE!')
 
 def main():
-    subject_nr = raw_input('Your subject_nr: ')
-    run_nr = int(raw_input('Run number: [0=training (fMRI & pupil), 1=test (fMRI & pupil), 2=mapper (fMRI only)] '))
+    subject_nr = input('Your subject_nr: ')
+    run_nr = int(input('Run number: [0=training (fMRI & pupil), 1=test (fMRI & pupil), 2=mapper (fMRI only)] '))
     scanner = 'n' # raw_input('Are you in the scanner (y/n)?: ')
-    track_eyes = raw_input('Are you recording gaze (y/n)?: ')
+    track_eyes = input('Are you recording gaze (y/n)?: ')
     if track_eyes == 'y':
         tracker_on = True
     elif track_eyes == 'n':

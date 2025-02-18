@@ -68,7 +68,7 @@ class RLTrial(Trial):
                     self.events.append([-99,self.session.clock.getTime()-self.start_time])
                     self.stopped = True
                     self.session.stopped = True
-                    print 'run canceled by user'
+                    print('run canceled by user')
                 # it handles both numeric and lettering modes 
                 elif ev in ['space', ' ']:
                     self.events.append([0,self.session.clock.getTime()-self.start_time])
@@ -77,7 +77,7 @@ class RLTrial(Trial):
                     else:
                         self.events.append([-99,self.session.clock.getTime()-self.start_time])
                         self.stopped = True
-                        print 'trial canceled by user'
+                        print('trial canceled by user')
                 elif ev == 't': # TR pulse
                     # self.events.append([99,self.session.clock.getTime()-self.start_time])
                     if self.phase == 0:
