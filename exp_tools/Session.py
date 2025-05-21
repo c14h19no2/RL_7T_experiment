@@ -28,8 +28,7 @@ from scipy.io import wavfile
 from pylink import *
 
 import pygaze
-from pygaze import libscreen 
-from pygaze import eyetracker
+# from pygaze import eyetracker
 from IPython import embed as shell
 
 
@@ -90,8 +89,15 @@ class Session(object):
         """
 
         # the actual screen-getting
-        self.display = libscreen.Display(disptype='psychopy', dispsize=size, fgc=(255,0,0), bgc=list((255*bgl for bgl in background_color)), screennr=screen_nr, mousevisible=False,fullscr=full_screen)
-        
+        win = visual.Window(
+            size=size,                     # (width, height)
+            screen=screen_nr,              # screen index
+            color=[bgl * 2 - 1 for bgl in background_color],  # PsychoPy uses [-1,1] color space
+            fullscr=full_screen,
+            units='pix',
+            allowGUI=False
+        )
+        self.display = win
         # self.pygaze_scr = libscreen.Screen(disptype='psychopy')
 
         # print dir(self.display)
@@ -99,7 +105,7 @@ class Session(object):
         # print dir(self.pygaze_scr)
         # print dir(self.pygaze_scr.screen[0])
 
-        self.screen = pygaze.expdisplay
+        self.screen = self.display
         self.screen.setMouseVisible(False)
         self.screen.setColor(background_color)
         # self.screen = visual.Window( size = size, fullscr = full_screen, allowGUI = False, units = 'pix', allowStencil = True, rgb = background_color, waitBlanking = wait_blanking, winType = 'pyglet' )
@@ -227,8 +233,25 @@ class EyelinkSession(Session):
         if tracker_on:
             # create actual tracker
             # try:
-            self.tracker = eyetracker.EyeTracker(self.display, trackertype='eyelink', resolution=self.display.dispsize, 
-                data_file=self.eyelink_temp_file, bgc=self.display.bgc,eventdetection='native')
+            from psychopy.iohub.client import launchHubServer
+
+# Ensure self.display is a psychopy.visual.Window object (from previous replacement)
+
+            io = launchHubServer(
+                window=self.display,
+                experiment_code='RL_exp',
+                dataroot='iohub_data',  # or a custom path to save EDF files
+                eyetracker_config=dict(
+                    name='eyelink',                  # hardware name
+                    model_name='EYELINK 1000 PLUS', # or another supported model
+                    runtime_settings=dict(
+                        sampling_rate=1000,         # or your device's rate
+                        track_eyes='BINOCULAR'
+                    )
+                )
+            )
+
+            self.tracker = io.devices.eyetracker
             self.tracker_on = True
             # except:
             #     print '\ncould not connect to tracker'

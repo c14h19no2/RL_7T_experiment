@@ -147,9 +147,37 @@ class RLSession(EyelinkSession):
         
         # and, stimuli that are identical across all trials
         # fixation point
-        self.fixation_outer_rim = visual.PatchStim(self.screen, mask='raisedCos',tex=None, size=15, pos = np.array((standard_parameters['x_offset'],standard_parameters['y_offset'])), color = self.background_color, maskParams = {'fringeWidth':0.4})
-        self.fixation_rim = visual.PatchStim(self.screen, mask='raisedCos',tex=None, size=12, pos = np.array((standard_parameters['x_offset'],standard_parameters['y_offset'])), color = (-1.0,-1.0,-1.0), maskParams = {'fringeWidth':0.4})
-        self.fixation = visual.PatchStim(self.screen, mask='raisedCos',tex=None, size=7, pos = np.array((standard_parameters['x_offset'],0.0)), color = (1, 1, 1), opacity = 1.0, maskParams = {'fringeWidth':0.4})
+        self.fixation_outer_rim = visual.GratingStim(
+            win=self.screen,
+            tex=None,  # No texture = uniform color
+            mask='raisedCos',
+            size=15,
+            pos=(standard_parameters['x_offset'], standard_parameters['y_offset']),
+            color=self.background_color,
+            units='pix',
+            maskParams={'fringeWidth': 0.4}
+        )
+        self.fixation_rim = visual.GratingStim(
+            win=self.screen,
+            tex=None,  # No grating texture
+            mask='raisedCos',
+            size=12,
+            pos=(standard_parameters['x_offset'], standard_parameters['y_offset']),
+            color=(-1.0, -1.0, -1.0),  # black in [-1,1] range
+            units='pix',
+            maskParams={'fringeWidth': 0.4}
+        )
+        self.fixation = visual.GratingStim(
+            win=self.screen,
+            tex=None,  # solid color
+            mask='raisedCos',
+            size=7,
+            pos=(standard_parameters['x_offset'], 0.0),
+            color=(1, 1, 1),  # white
+            opacity=1.0,
+            units='pix',
+            maskParams={'fringeWidth': 0.4}
+        )
         
         self.RL_stim_1 = visual.ShapeStim(win=self.screen, vertices=self.standard_vertices, closeShape=True, lineWidth=0, lineColor='white', lineColorSpace='rgb', fillColor='black', fillColorSpace='rgb', ori=0 )
         self.RL_stim_2 = visual.ShapeStim(win=self.screen, vertices=self.standard_vertices, closeShape=True, lineWidth=0, lineColor='white', lineColorSpace='rgb', fillColor='black', fillColorSpace='rgb', ori=180 )
@@ -235,7 +263,7 @@ class RLSession(EyelinkSession):
 
     def shuffle_trials(self):
         if not hasattr(self, 'trials'):
-            raise UndefinedError
+            raise RuntimeError('No trials to shuffle.')
 
         # shuffle trials
         self.run_order = np.arange(len(self.trials))

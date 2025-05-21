@@ -6,7 +6,7 @@ experimental software for RL experiment, using psychopy as a backend and pygaze 
 ```bash
 python run_RL_exp.py
 >>> Your subject_nr:
->>> Run number: [-1=mapper, 0=training, 1=test]
+>>> Run number: [0=training, 1=test, 2=mapper]
 >>> Are you in the scanner (y/n)?: 
 >>> Are you recording gaze (y/n)?: 
 ```
